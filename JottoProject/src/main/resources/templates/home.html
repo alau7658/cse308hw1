@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>JOTTO Home Page</title>
+  
+
+    <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="./CSS/style.css">
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src="js/js.cookie.js"></script>
+    <script src="js/home.js"></script>
+    <script>
+        var cusername = $.cookie('username');
+        if(cusername=="null" || cusername==undefined){
+            document.location.href="./index.html";
+        }
+    </script>
+    
+  
+</head>
+
+<body>
+    <div id = "wrap">
+      <div class="regbar">
+          <img src = "./img/text-logo.png" style = "margin-top:5px;" width = "128px" height = "56px" >
+          <div class = "regbar-right">
+                <span>Welcome, <script>document.write($.cookie("username"))</script></span>
+                <a href="./home.html" class="headerButton">Menu</a>
+                <a class="headerButton" onclick="logout()">Sign Out</a>
+          </div>
+      </div>
+    </div>
+
+    <div class = "text-center">
+            <img id="jotto" src = "./img/text-logo.png" style="display:none;" width = "50%" height = "50%" >
+            <h1 id="jottoDescription" style="display: none;">A logic-oriented word game</h1>
+    </div>
+    <br>
+    <br>
+    <div class = "text-center">
+            <a href="./newgame.html" class="homeButton" id="btn1" style="display:none;">New Game</a>
+            <a href="./history.html" onclick="getHistory()" class="homeButton" id="btn2" style="display:none;">Match History</a>
+    </div>
+
+
+
+
+    <script>
+
+        $(document).ready(function(){
+            $("#jotto").fadeIn(3000);
+            $("#jottoDescription").fadeIn(3000);
+            $("#btn1").delay(1000).fadeIn(2000);
+            $("#btn2").delay(1000).fadeIn(2000);
+        })
+
+            
+    </script>
+  
+
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>JOTTO Game</title>
+  
+  
+
+    <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="./CSS/style.css">
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src="js/js.cookie.js"></script>
+    <script src="js/home.js"></script>
+    <script src="js/game.js"></script>
+    <script>
+        var alpaHelper = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+        var alpacookie = $.cookie("A");
+        console.log(alpacookie);
+        if(alpacookie=="null" || alpacookie==undefined){
+            console.log("null");
+            var alpa = new Array();
+            for(var i=0;i<26;i++){
+                alpa.push(0);
+            }
+        }else{
+            console.log("not null");
+            var alpa = new Array();
+            for(var i=0;i<26;i++){
+                alpa[i] = $.cookie(alpaHelper[i]);
+            }
+        }
+        var cusername = $.cookie('username');
+        if(cusername=="null" || cusername==undefined){
+            document.location.href="./index.html";
+        }
+        var gameId = $.cookie('gameId');
+        if(gameId==-1){
+            document.location.href="./home.html";
+        }
+
+
+
+        $(document).ready(function(){
+            var tabl = document.getElementById("tbu");
+            var row = document.createElement('tr');
+            var cell = document.createElement('th');
+            cell.appendChild(document.createTextNode("Your guess:"));
+            // row.appendChild(cell);
+            // cell = document.createElement('td');
+            // var wordToRender = "Gears";
+            //
+            // for(var i=0;i<wordToRender.length;i++){
+            //     var lett = document.createElement('span');
+            //     lett.appendChild(document.createTextNode(wordToRender[i]));
+            //     lett.setAttribute("style","color:#FFFFFF;");
+            //     cell.appendChild(lett);
+            // }
+            //
+            // row.appendChild(cell);
+            // cell = document.createElement('td');
+            // cell.appendChild(document.createTextNode("2"));
+            // row.appendChild(cell);
+            // tabl.appendChild(row);
+            // row = document.createElement('tr');
+            // cell = document.createElement('td');
+            // row.appendChild(cell);
+            // cell = document.createElement('td');
+            // wordToRender = "Jotto";
+            //
+            // for(var i=0;i<wordToRender.length;i++){
+            //     var lett = document.createElement('span');
+            //     lett.appendChild(document.createTextNode(wordToRender[i]));
+            //     lett.setAttribute("style","color:#FFFFFF;");
+            //     cell.appendChild(lett);
+            // }
+            // row.append(cell);
+            // cell = document.createElement('td');
+            // cell.appendChild(document.createTextNode("3"));
+            // row.appendChild(cell);
+            tabl.appendChild(row);
+
+
+
+
+            var form = $('#game');
+            form.submit(function(event){
+                var w = $('#guess_word').val();
+                for(var i=0;i<26;i++){
+                    $.cookie(alpaHelper[i],alpa[i]);
+                }
+                if(validate_word_r(w)){
+                    event.preventDefault();
+                }else{
+                    var box_opacity = $('#error').css('opacity');
+                    if(box_opacity==1){
+                        $("#error").fadeIn(500);
+                    }
+                    
+                }
+                event.preventDefault();
+            });
+        });
+    </script>
+    
+  
+</head>
+
+<body>
+    <div id = "wrap">
+      <div class="regbar">
+          <img src = "./img/text-logo.png" style = "margin-top:5px;" width = "128px" height = "56px" >
+          <div class = "regbar-right">
+                <span>Welcome, <script>document.write($.cookie("username"))</script></span>
+                <a href="./home.html" class="headerButton">Menu</a>
+                <a class="headerButton" onclick="logout()">Sign Out</a>
+          </div>
+      </div>
+    </div>
+    <h2 id="enterYourGuess">Enter your guess:</h2>
+    <h2 id = "win" style = "display:none;">Your Win!!!</h2>
+    <h2 id = "lose" style = "display:none;">Your Lose...</h2>
+    <form id="game">
+        <input type="text" style="margin-left:20px;width:20%;color:black;margin-right:0px;height:32px;" id="guess_word" name="guess_word">
+        <button type="submit" id="submitfield" class="submitButton">Submit</button>
+    </form>
+    <a href="./newgame.html" id="newGameBtn" style="margin-left:30px;display:none;" class="headerButton">New Game</a>
+    <h4 id="error" style="color:red;display:none;margin-left:20px;font-weight: 300;">Invalid word. Please try again.</h4>
+    <div style="margin-left:20px;position:relative;"> 
+        <div style="position:absolute;left:50%;margin:0px;">
+            <h2>Your word: <script>document.write($.cookie("word"))</script></h2>
+        </div>
+        <div style="clear: both;">
+            <h2>Alpabet list:<button class="resetBtn" onclick="resetAlpa();"/>&#8634</h3></h2>
+
+        <button id="A" class="alpabet">A</button>
+        <button id="B" class="alpabet">B</button>
+        <button id="C" class="alpabet">C</button>
+        <button id="D" class="alpabet">D</button>
+        <button id="E" class="alpabet">E</button>
+        <button id="F" class="alpabet">F</button>
+        <button id="G" class="alpabet">G</button>
+        <button id="H" class="alpabet">H</button>
+        <button id="I" class="alpabet">I</button>
+        <button id="J" class="alpabet">J</button>
+        <button id="K" class="alpabet">K</button>
+        <button id="L" class="alpabet">L</button>
+        <button id="M" class="alpabet">M</button>
+        <button id="N" class="alpabet">N</button>
+        
+        <br>
+        <button id="O" class="alpabet">O</button>
+        <button id="P" class="alpabet">P</button>
+        <button id="Q" class="alpabet">Q</button>
+        <button id="R" class="alpabet">R</button>
+        <button id="S" class="alpabet">S</button>
+        <button id="T" class="alpabet">T</button>
+        <button id="U" class="alpabet">U</button>
+        <button id="V" class="alpabet">V</button>
+        <button id="W" class="alpabet">W</button>
+        <button id="X" class="alpabet">X</button>
+        <button id="Y" class="alpabet">Y</button>
+        <button id="Z" class="alpabet">Z</button>
+        </div>
+        
+    </div>
+
+<!--Unfinished, need to dynamically update the user guess and cpu guess table, see game.js for details-->
+
+
+
+    <div>
+        <table id = "tbut" width="400px" border="0" cellspacing="0" style="font-size:30px;margin-left:30px;display:inline-table;">
+            <tbody id="tbu">
+
+            </tbody>
+        </table>
+        <table width="400px" border="0" cellspacing="0" style="font-size:30px;position:absolute;left:50%;display:inline-table;">
+                <tbody id="tbc">
+
+                </tbody>
+        </table>
+    </div>
+    <script>
+        for(var i=0;i<26;i++){
+            var ele = document.getElementById(alpaHelper[i]);
+            if(alpa[i]%3==0){
+                ele.style.color="#FFFFFF";
+            }else if(alpa[i]%3==1){
+                ele.style.color="#00FF00";
+            }else{
+                ele.style.color="#FF0000";
+            }
+        }
+        $(".alpabet").click(function(){
+            var alpaid = $(this).attr('id');
+            var myElement = document.getElementById(alpaid);
+            console.log(alpaid);
+            var num = $.inArray(alpaid,alpaHelper);
+            alpa[num]+=1;
+            var check = alpa[num];
+            if(check%3==0){
+                myElement.style.color="#FFFFFF";
+
+            }else if(check%3==1){
+                myElement.style.color="#00FF00";
+
+                if(alpaid=="A") {
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">A<\/span>/g, '<span style="color:#00FF00;">A</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">a<\/span>/g, '<span style="color:#00FF00;">a</span>'));
+                    });
+                }
+                else if(alpaid=="B"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">B<\/span>/g, '<span style="color:#00FF00;">B</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">b<\/span>/g, '<span style="color:#00FF00;">b</span>'));
+
+                    });
+                }
+                else if(alpaid=="C"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">C<\/span>/g, '<span style="color:#00FF00;">C</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">c<\/span>/g, '<span style="color:#00FF00;">c</span>'));
+                    });
+                }
+                else if(alpaid=="D"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">D<\/span>/g, '<span style="color:#00FF00;">D</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">d<\/span>/g, '<span style="color:#00FF00;">d</span>'));
+                    });
+                }
+                else if(alpaid=="E"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">E<\/span>/g, '<span style="color:#00FF00;">E</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">e<\/span>/g, '<span style="color:#00FF00;">e</span>'));
+                    });
+                }
+                else if(alpaid=="F"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">F<\/span>/g, '<span style="color:#00FF00;">F</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">f<\/span>/g, '<span style="color:#00FF00;">f</span>'));
+                    });
+                }
+                else if(alpaid=="G"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">G<\/span>/g, '<span style="color:#00FF00;">G</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">g<\/span>/g, '<span style="color:#00FF00;">g</span>'));
+                    });
+                }
+                else if(alpaid=="H"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">H<\/span>/g, '<span style="color:#00FF00;">H</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">h<\/span>/g, '<span style="color:#00FF00;">h</span>'));
+                    });
+                }
+                else if(alpaid=="I"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">I<\/span>/g, '<span style="color:#00FF00;">I</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">i<\/span>/g, '<span style="color:#00FF00;">i</span>'));
+                    });
+                }
+                else if(alpaid=="J"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">J<\/span>/g, '<span style="color:#00FF00;">J</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">j<\/span>/g, '<span style="color:#00FF00;">j</span>'));
+                    });
+                }
+                else if(alpaid=="K"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">K<\/span>/g, '<span style="color:#00FF00;">K</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">k<\/span>/g, '<span style="color:#00FF00;">k</span>'));
+                    });
+                }
+                else if(alpaid=="L"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">L<\/span>/g, '<span style="color:#00FF00;">L</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">l<\/span>/g, '<span style="color:#00FF00;">l</span>'));
+                    });
+                }
+                else if(alpaid=="M"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">M<\/span>/g, '<span style="color:#00FF00;">M</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">m<\/span>/g, '<span style="color:#00FF00;">m</span>'));
+                    });
+                }
+                else if(alpaid=="N"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">N<\/span>/g, '<span style="color:#00FF00;">N</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">n<\/span>/g, '<span style="color:#00FF00;">n</span>'));
+                    });
+                }
+                else if(alpaid=="O"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">O<\/span>/g, '<span style="color:#00FF00;">O</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">o<\/span>/g, '<span style="color:#00FF00;">o</span>'));
+                    });
+                }
+                else if(alpaid=="P"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">P<\/span>/g, '<span style="color:#00FF00;">P</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">p<\/span>/g, '<span style="color:#00FF00;">p</span>'));
+                    });
+                }
+                else if(alpaid=="Q"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">Q<\/span>/g, '<span style="color:#00FF00;">Q</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">q<\/span>/g, '<span style="color:#00FF00;">q</span>'));
+                    });
+                }
+                else if(alpaid=="R"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">R<\/span>/g, '<span style="color:#00FF00;">R</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">r<\/span>/g, '<span style="color:#00FF00;">r</span>'));
+                    });
+                }
+                else if(alpaid=="S"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">S<\/span>/g, '<span style="color:#00FF00;">S</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">s<\/span>/g, '<span style="color:#00FF00;">s</span>'));
+                    });
+                }
+                else if(alpaid=="T"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">T<\/span>/g, '<span style="color:#00FF00;">T</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">t<\/span>/g, '<span style="color:#00FF00;">t</span>'));
+                    });
+                }
+                else if(alpaid=="U"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">U<\/span>/g, '<span style="color:#00FF00;">U</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">u<\/span>/g, '<span style="color:#00FF00;">u</span>'));
+                    });
+                }
+                else if(alpaid=="V"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">V<\/span>/g, '<span style="color:#00FF00;">V</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">v<\/span>/g, '<span style="color:#00FF00;">v</span>'));
+                    });
+                }
+                else if(alpaid=="W"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">W<\/span>/g, '<span style="color:#00FF00;">W</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">w<\/span>/g, '<span style="color:#00FF00;">w</span>'));
+                    });
+                }
+                else if(alpaid=="X"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">X<\/span>/g, '<span style="color:#00FF00;">X</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">x<\/span>/g, '<span style="color:#00FF00;">x</span>'));
+                    });
+                }
+                else if(alpaid=="Y"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">Y<\/span>/g, '<span style="color:#00FF00;">Y</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">y<\/span>/g, '<span style="color:#00FF00;">y</span>'));
+                    });
+                }
+                else if(alpaid=="Z"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">Z<\/span>/g, '<span style="color:#00FF00;">Z</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#FFFFFF;\">z<\/span>/g, '<span style="color:#00FF00;">z</span>'));
+                    });
+                }
+            }else{
+                myElement.style.color="#FF0000";
+
+                if(alpaid=="A") {
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">A<\/span>/g, '<span style="color:#FFFFFF;">A</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">a<\/span>/g, '<span style="color:#FFFFFF;">a</span>'));
+                    });
+                }
+                else if(alpaid=="B"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">B<\/span>/g, '<span style="color:#FFFFFF;">B</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">b<\/span>/g, '<span style="color:#FFFFFF;">b</span>'));
+                    });
+                }
+                else if(alpaid=="C"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">C<\/span>/g, '<span style="color:#FFFFFF;">C</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">c<\/span>/g, '<span style="color:#FFFFFF;">c</span>'));
+                    });
+                }
+                else if(alpaid=="D"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">D<\/span>/g, '<span style="color:#FFFFFF;">D</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">d<\/span>/g, '<span style="color:#FFFFFF;">d</span>'));
+                    });
+                }
+                else if(alpaid=="E"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">E<\/span>/g, '<span style="color:#FFFFFF;">E</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">e<\/span>/g, '<span style="color:#FFFFFF;">e</span>'));
+                    });
+                }
+                else if(alpaid=="F"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">F<\/span>/g, '<span style="color:#FFFFFF;">F</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">f<\/span>/g, '<span style="color:#FFFFFF;">f</span>'));
+                    });
+                }
+                else if(alpaid=="G"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">G<\/span>/g, '<span style="color:#FFFFFF;">G</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">g<\/span>/g, '<span style="color:#FFFFFF;">g</span>'));
+                    });
+                }
+                else if(alpaid=="H"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">H<\/span>/g, '<span style="color:#FFFFFF;">H</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">h<\/span>/g, '<span style="color:#FFFFFF;">h</span>'));
+                    });
+                }
+                else if(alpaid=="I"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">I<\/span>/g, '<span style="color:#FFFFFF;">I</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">i<\/span>/g, '<span style="color:#FFFFFF;">i</span>'));
+                    });
+                }
+                else if(alpaid=="J"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">J<\/span>/g, '<span style="color:#FFFFFF;">J</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">j<\/span>/g, '<span style="color:#FFFFFF;">j</span>'));
+                    });
+                }
+                else if(alpaid=="K"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">K<\/span>/g, '<span style="color:#FFFFFF;">K</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">k<\/span>/g, '<span style="color:#FFFFFF;">k</span>'));
+                    });
+                }
+                else if(alpaid=="L"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">L<\/span>/g, '<span style="color:#FFFFFF;">L</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">l<\/span>/g, '<span style="color:#FFFFFF;">l</span>'));
+                    });
+                }
+                else if(alpaid=="M"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">M<\/span>/g, '<span style="color:#FFFFFF;">M</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">m<\/span>/g, '<span style="color:#FFFFFF;">m</span>'));
+                    });
+                }
+                else if(alpaid=="N"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">N<\/span>/g, '<span style="color:#FFFFFF;">N</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">n<\/span>/g, '<span style="color:#FFFFFF;">n</span>'));
+                    });
+                }
+                else if(alpaid=="O"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">O<\/span>/g, '<span style="color:#FFFFFF;">O</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">o<\/span>/g, '<span style="color:#FFFFFF;">o</span>'));
+                    });
+                }
+                else if(alpaid=="P"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">P<\/span>/g, '<span style="color:#FFFFFF;">P</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">p<\/span>/g, '<span style="color:#FFFFFF;">p</span>'));
+                    });
+                }
+                else if(alpaid=="Q"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">Q<\/span>/g, '<span style="color:#FFFFFF;">Q</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">q<\/span>/g, '<span style="color:#FFFFFF;">q</span>'));
+                    });
+                }
+                else if(alpaid=="R"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">R<\/span>/g, '<span style="color:#FFFFFF;">R</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">r<\/span>/g, '<span style="color:#FFFFFF;">r</span>'));
+                    });
+                }
+                else if(alpaid=="S"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">S<\/span>/g, '<span style="color:#FFFFFF;">S</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">s<\/span>/g, '<span style="color:#FFFFFF;">s</span>'));
+                    });
+                }
+                else if(alpaid=="T"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">T<\/span>/g, '<span style="color:#FFFFFF;">T</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">t<\/span>/g, '<span style="color:#FFFFFF;">t</span>'));
+                    });
+                }
+                else if(alpaid=="U"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">U<\/span>/g, '<span style="color:#FFFFFF;">U</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">u<\/span>/g, '<span style="color:#FFFFFF;">u</span>'));
+                    });
+                }
+                else if(alpaid=="V"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">V<\/span>/g, '<span style="color:#FFFFFF;">V</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">v<\/span>/g, '<span style="color:#FFFFFF;">v</span>'));
+                    });
+                }
+                else if(alpaid=="W"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">W<\/span>/g, '<span style="color:#FFFFFF;">W</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">w<\/span>/g, '<span style="color:#FFFFFF;">w</span>'));
+                    });
+                }
+                else if(alpaid=="X"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">X<\/span>/g, '<span style="color:#FFFFFF;">X</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">x<\/span>/g, '<span style="color:#FFFFFF;">x</span>'));
+                    });
+                }
+                else if(alpaid=="Y"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">Y<\/span>/g, '<span style="color:#FFFFFF;">Y</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">y<\/span>/g, '<span style="color:#FFFFFF;">y</span>'));
+                    });
+                }
+                else if(alpaid=="Z"){
+                    $('#tbu > tr > td').each(function(){
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">Z<\/span>/g, '<span style="color:#FFFFFF;">Z</span>'));
+                                $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">z<\/span>/g, '<span style="color:#FFFFFF;">z</span>'));
+                    });
+                }
+            }
+
+
+
+
+        });
+
+        function resetAlpa(){
+            for(var i=0;i<26;i++){
+                var alpaid = alpaHelper[i];
+                alpa[i]=0;
+                $.cookie(alpaHelper[i],alpa[i]);
+                var ele = document.getElementById(alpaHelper[i]);
+                if(alpa[i]%3==0){
+                    ele.style.color="#FFFFFF";
+
+                    if(alpaid=="A") {
+                        $('tbody').each(function () {
+                            if (this.id == "tbu") {
+                                $('td').each(function () {
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">A<\/span>/g, '<span style="color:#FFFFFF;">A</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">a<\/span>/g, '<span style="color:#FFFFFF;">a</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="B"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">B<\/span>/g, '<span style="color:#FFFFFF;">B</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">b<\/span>/g, '<span style="color:#FFFFFF;">b</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="C"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">C<\/span>/g, '<span style="color:#FFFFFF;">C</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">c<\/span>/g, '<span style="color:#FFFFFF;">c</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="D"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">D<\/span>/g, '<span style="color:#FFFFFF;">D</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">d<\/span>/g, '<span style="color:#FFFFFF;">d</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="E"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">E<\/span>/g, '<span style="color:#FFFFFF;">E</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">e<\/span>/g, '<span style="color:#FFFFFF;">e</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="F"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">F<\/span>/g, '<span style="color:#FFFFFF;">F</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">f<\/span>/g, '<span style="color:#FFFFFF;">f</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="G"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">G<\/span>/g, '<span style="color:#FFFFFF;">G</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">g<\/span>/g, '<span style="color:#FFFFFF;">g</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="H"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">H<\/span>/g, '<span style="color:#FFFFFF;">H</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">h<\/span>/g, '<span style="color:#FFFFFF;">h</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="I"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">I<\/span>/g, '<span style="color:#FFFFFF;">I</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">i<\/span>/g, '<span style="color:#FFFFFF;">i</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="J"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">J<\/span>/g, '<span style="color:#FFFFFF;">J</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">j<\/span>/g, '<span style="color:#FFFFFF;">j</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="K"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">K<\/span>/g, '<span style="color:#FFFFFF;">K</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">k<\/span>/g, '<span style="color:#FFFFFF;">k</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="L"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">L<\/span>/g, '<span style="color:#FFFFFF;">L</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">l<\/span>/g, '<span style="color:#FFFFFF;">l</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="M"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">M<\/span>/g, '<span style="color:#FFFFFF;">M</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">m<\/span>/g, '<span style="color:#FFFFFF;">m</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="N"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">N<\/span>/g, '<span style="color:#FFFFFF;">N</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">n<\/span>/g, '<span style="color:#FFFFFF;">n</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="O"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">O<\/span>/g, '<span style="color:#FFFFFF;">O</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">o<\/span>/g, '<span style="color:#FFFFFF;">o</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="P"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">P<\/span>/g, '<span style="color:#FFFFFF;">P</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">p<\/span>/g, '<span style="color:#FFFFFF;">p</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="Q"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">Q<\/span>/g, '<span style="color:#FFFFFF;">Q</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">q<\/span>/g, '<span style="color:#FFFFFF;">q</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="R"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">R<\/span>/g, '<span style="color:#FFFFFF;">R</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">r<\/span>/g, '<span style="color:#FFFFFF;">r</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="S"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">S<\/span>/g, '<span style="color:#FFFFFF;">S</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">s<\/span>/g, '<span style="color:#FFFFFF;">s</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="T"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">T<\/span>/g, '<span style="color:#FFFFFF;">T</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">t<\/span>/g, '<span style="color:#FFFFFF;">t</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="U"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">U<\/span>/g, '<span style="color:#FFFFFF;">U</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">u<\/span>/g, '<span style="color:#FFFFFF;">u</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="V"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">V<\/span>/g, '<span style="color:#FFFFFF;">V</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">v<\/span>/g, '<span style="color:#FFFFFF;">v</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="W"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">W<\/span>/g, '<span style="color:#FFFFFF;">W</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">w<\/span>/g, '<span style="color:#FFFFFF;">w</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="X"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">X<\/span>/g, '<span style="color:#FFFFFF;">X</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">x<\/span>/g, '<span style="color:#FFFFFF;">x</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="Y"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">Y<\/span>/g, '<span style="color:#FFFFFF;">Y</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">y<\/span>/g, '<span style="color:#FFFFFF;">y</span>'));
+                                });
+                            }
+                        });
+                    }
+                    else if(alpaid=="Z"){
+                        $('tbody').each(function(){
+                            if(this.id=="tbu"){
+                                $('td').each(function(){
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">Z<\/span>/g, '<span style="color:#FFFFFF;">Z</span>'));
+                                    $(this).html($(this).html().replace(/<span style=\"color:#00FF00;\">z<\/span>/g, '<span style="color:#FFFFFF;">z</span>'));
+                                });
+                            }
+                        });
+                    }
+                }else if(alpa[i]%3==1){
+                    ele.style.color="#00FF00";
+                }else{
+                    ele.style.color="#FF0000";
+                }
+            }
+        }
+    </script>
+
+
+
+
+
+</body>
+
+</html>

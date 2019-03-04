@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>JOTTO History</title>
+  
+
+    <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="./CSS/style.css">
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src="js/js.cookie.js"></script>
+    <script src="js/home.js"></script>
+    <script src="js/newgame.js"></script>
+    <script src="js/details.js"></script>
+    <script>
+        var cusername = $.cookie('username');
+        if(cusername=="null" || cusername==undefined){
+            document.location.href="./index.html";
+        }
+    </script>
+    
+
+</head>
+
+<body>
+    <div id = "wrap">
+      <div class="regbar">
+          <img src = "./img/text-logo.png" style = "margin-top:5px;" width = "128px" height = "56px" >
+          <div class = "regbar-right">
+                <span>Welcome, <script>document.write($.cookie("username"))</script></span>
+                <a href="./home.html" class="headerButton">Menu</a>
+                <a class="headerButton" onclick="logout()">Sign Out</a>
+          </div>
+      </div>
+    </div>
+    <div style="text-align:center">
+        <h1>Match History</h1>
+
+            <table width = "90%" style="margin-left:5%;font-size:25px;" id = "historyTable">
+            <tr class="d0">
+                <td>Date Time</td>
+                <td>Match Id</td>
+                <td>Result</td>
+                <td>User's word</td>
+                <td>CPU's word</td>
+                <td>Action</td>
+
+            </tr>
+            </table>
+
+    </div>
+
+
+
+
+</body>
+<script>
+    $( document ).ready(function() {
+        var mH = $.cookie("jsonString");
+        var data = jQuery.parseJSON(mH);
+        append_json(data);
+        function append_json(data){
+            var table = $("#historyTable");
+            $.each(data, function(key,value) {
+                var game_id = data[key].game_id;
+                var user_word = data[key].user_word;
+                var cpu_word = data[key].cpu_word;
+                var game_state = data[key].game_state;
+                var date_created = data[key].date_created;
+                var arr = [game_id,user_word,cpu_word,game_state,date_created];
+                var tr = document.createElement('tr');
+                tr.innerHTML =
+                    '<td class="d0">' + data[key].date_created + '</td>'+
+                    '<td class="d0">' + data[key].game_id + '</td>' +
+                    '<td class="d0">' + data[key].game_state + '</td>' +
+                    '<td class="d0">' + data[key].user_word + '</td>' +
+                    '<td class="d0">' + data[key].cpu_word + '</td>'+
+                    '<td class="d0">' + '<a style="color:#8FBC8F" onclick="detailredirect(' + data[key].game_id + ')">Details</a></td>';
+                tr.className = "d0";
+                table.append(tr);
+
+            });
+        }
+    });
+
+
+</script>
+
+</html>

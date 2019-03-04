@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>JOTTO History</title>
+  
+
+    <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="./CSS/style.css">
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src="js/js.cookie.js"></script>
+    <script src="js/home.js"></script>
+    <script src="js/newgame.js"></script>
+    <script>
+        var cusername = $.cookie('username');
+        if(cusername=="null" || cusername==undefined){
+            document.location.href="./index.html";
+        }
+
+        $(document).ready(function(){
+            $("#history").fadeIn(2000);
+        });
+    </script>
+    
+
+</head>
+
+<body>
+    <div id = "wrap">
+      <div class="regbar">
+          <img src = "./img/text-logo.png" style = "margin-top:5px;" width = "128px" height = "56px" >
+          <div class = "regbar-right">
+                <span>Welcome, <script>document.write($.cookie("username"))</script></span>
+                <a href="./home.html" class="headerButton">Menu</a>
+                <a class="headerButton" onclick="logout()">Sign Out</a>
+          </div>
+      </div>
+    </div>
+    <div style="text-align:center">
+        <img src = "./img/matchHistory.png" id="history" style = "margin-top:0px;display:none;" height="10%">
+
+    <!--Unfinished, need to dynamically update the match history table, need to chang the color of letters in the word,
+        same as secret word: green.
+        need to make the "Details" button in each row clickable which redirect to the corresponding "detail.html"
+        feel free to create a new history.js file-->
+            <table width = "90%" style="margin-left:5%;font-size:25px;">
+            <tr class="d0"><td>Date Time</td><td>Match Id</td><td>Result</td><td>User's word</td><td>CPU's word</td><td>Action</td></tr>
+            <tr class="d0"><td>2019/02/20 15:37:45</td><td>40397</td><td style="color:#e7eb00">incomplete</td><td>Zebra</td><td>*****</td><td><a style="color:#004b80" onclick="detailredirect()">Details</a></td></tr>
+            <tr class="d0"><td>2019/02/20 15:37:45</td><td>40397</td><td>incomplete</td><td>Zebra</td><td>*****</td><td><a style="color:#0688fa" onclick="detailredirect()">Details</a></td></tr>
+            </table>
+
+    </div>
+
+
+
+
+</body>
+
+</html>

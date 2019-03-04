@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>JOTTO History</title>
+  
+
+    <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="./CSS/style.css">
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src="js/js.cookie.js"></script>
+    <script src="js/home.js"></script>
+    <script src="js/newgame.js"></script>
+    <script>
+        var cusername = $.cookie('username');
+        if(cusername=="null" || cusername==undefined){
+            document.location.href="./index.html";
+        }
+
+        $(document).ready(function(){
+            $("#history").fadeIn(2000);
+        });
+    </script>
+    
+
+</head>
+
+<body>
+    <div id = "wrap">
+      <div class="regbar">
+          <img src = "./img/text-logo.png" style = "margin-top:5px;" width = "128px" height = "56px" >
+          <div class = "regbar-right">
+                <span>Welcome, <script>document.write($.cookie("username"))</script></span>
+                <a href="./home.html" class="headerButton">Menu</a>
+                <a class="headerButton" onclick="logout()">Sign Out</a>
+          </div>
+      </div>
+    </div>
+    <div style="text-align:center">
+        <img src = "./img/matchHistory.png" id="history" style = "margin-top:0px;display:none;" height="10%">
+
+        <!--Unfinished, fill in the match id, date time, user's word, and so on-->
+
+
+        <h2>Match Id:       Date Time:</h2>
+        <h2>User's word:        CPU's word:     Round:      Result:</h2>
+        <a href="./history.html" id="backBtn" style="margin-right:30px;" class="headerButton">Back</a>
+
+            <table width = "90%" style="margin-left:5%;font-size:25px;">
+
+                <!--Unfinished, need to dynamically update the detail table
+                need to change the color of the letter-->
+
+            <tr class="d0"><td>Round</td><td>User's guess</td><td>Number of correct letter</td><td>CPU's guess</td><td>Number of correct letter</td></tr>
+            <tr class="d0"><td>1</td><td>Gears</td><td>2</td><td>Ghost</td><td>1</td></tr>
+            <tr class="d0"><td>2</td><td>Geans</td><td>3</td><td>Hared</td><td>1</td></tr>
+            </table>
+
+    </div>
+
+
+
+
+</body>
+
+</html>
